@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAID STUDIOS | Sistema de Reclutamiento Shelby Agency</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-card: linear-gradient(145deg, #111111, #1a1a1a);
+            --bg-card-alt: linear-gradient(145deg, #0d0d0d, #141414);
+            --text-light: #f2efe9;
+            --text-muted: #888888;
+            --border-color: #222222;
+            --border-hover: #444444;
+            --accent: #ffffff;
+            --highlight: #dcd9d2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.02); border-color: #333; }
+            50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.1); border-color: #666; }
+            100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.02); border-color: #333; }
+        }
+
+        /* Navbar */
+        nav {
+            padding: 20px 5%;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: 2px; }
+        .logo span { font-weight: 400; color: var(--text-muted); font-size: 14px; letter-spacing: 4px; }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 120px 5% 100px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.1; text-transform: uppercase; letter-spacing: -1px;}
+        .hero p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--text-light);
+            color: var(--bg-dark);
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .btn:hover {
+            background-color: #ffffff;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(255,255,255,0.15);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255,255,255,0.05);
+            border-color: var(--border-hover);
+        }
+
+        /* Layout */
+        .container { max-width: 1100px; margin: 0 auto; padding: 80px 5%; }
+        .container-sm { max-width: 800px; margin: 0 auto; padding: 60px 5%; }
+        .section-title {
+            text-align: center; font-size: 2.2rem; margin-bottom: 20px;
+            text-transform: uppercase; letter-spacing: 1px; color: #fff;
+        }
+        .section-subtitle {
+            text-align: center; color: var(--text-muted); max-width: 800px; margin: 0 auto 60px; font-size: 1.1rem;
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+        /* Cards Generales */
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            padding: 40px 30px; border-radius: 8px;
+            transition: all 0.4s ease;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-10px); border-color: var(--border-hover);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        }
+        .card h3 { font-size: 1.3rem; margin-bottom: 15px; text-transform: uppercase; color: #fff;}
+        .card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+        .card ul { list-style: none; color: var(--text-muted); font-size: 0.95rem; }
+        .card ul li { margin-bottom: 10px; padding-left: 18px; position: relative; }
+        .card ul li::before { content: '✦'; position: absolute; left: 0; color: #666; font-size: 0.8rem; transition: 0.3s;}
+        .card:hover ul li::before { color: var(--text-light); }
+
+        /* Feature Highlight Box */
+        .highlight-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--text-light);
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight-box h4 { font-size: 1.2rem; text-transform: uppercase; margin-bottom: 10px; }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        /* Gráfico Interactivo */
+        .chart-section {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 40px; margin-top: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .canvas-container { position: relative; height: 400px; width: 100%; }
+
+        /* Pricing */
+        .pricing-card {
+            background: var(--bg-card-alt); text-align: center;
+            padding: 50px 30px; border-radius: 8px; border: 1px solid var(--border-color);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .pricing-card.premium {
+            border: 1px solid #444;
+            background: linear-gradient(180deg, #111, #050505);
+            animation: pulseGlow 4s infinite alternate;
+            position: relative;
+            overflow: hidden;
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px); border-color: var(--border-hover); box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        }
+        .pricing-card h4 { font-size: 1.5rem; text-transform: uppercase; margin-bottom: 15px; color: #ddd;}
+        .pricing-card .price { font-size: 2.2rem; font-weight: bold; margin-bottom: 10px; color: var(--text-light); }
+        .pricing-card .desc { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; }
+        .pricing-card ul { margin-bottom: 20px; flex-grow: 1; }
+        .pricing-card ul li { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px; font-size: 0.95rem; text-align: left;}
+        .pricing-card ul li:last-child { border-bottom: none; }
+
+        footer {
+            text-align: center; padding: 50px 5%; border-top: 1px solid var(--border-color);
+            margin-top: 60px; color: #555; font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase;
+        }
+
+        @media (max-width: 900px) { .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 768px) {
+            .grid-2, .grid-4, .grid-3 { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.2rem; }
+            .canvas-container { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">MAID <span>✦ STUDIOS ✦</span></div>
+        <a href="#precios" class="btn btn-outline" style="padding: 10px 20px; font-size: 0.85rem;">Ver Modelo de Inversión</a>
+    </nav>
+
+    <header class="hero reveal active">
+        <div class="badge">Shelby Agency x Maid Studios</div>
+        <h1>Máquina de Reclutamiento & Monetización</h1>
+        <p>Construimos un ecosistema para atraer modelos premium a la agencia, y un sistema automatizado para monetizar al 90% de las candidatas que son rechazadas vendiéndoles tu infoproducto.</p>
+        <div style="display:flex; gap:15px; justify-content:center; flex-wrap: wrap;">
+            <a href="#embudo" class="btn">El Embudo Híbrido</a>
+            <a href="#grafico" class="btn btn-outline">Proyección de Ventas</a>
+        </div>
+    </header>
+
+    <!-- 1. LA ESTRATEGIA / EL EMBUDO -->
+    <div class="container" id="embudo" style="padding-top: 20px;">
+        <h2 class="section-title reveal">El Motor de Atracción</h2>
+        <p class="section-subtitle reveal">No buscamos chicas que quieran "plata fácil". Apuntamos a modelos estancadas, que regalan su contenido y queman su imagen. Les vendemos posicionamiento y profesionalismo.</p>
+        
+        <div class="grid-3">
+            <div class="card reveal">
+                <div style="font-size: 2rem; color: #fff; margin-bottom: 10px;">01</div>
+                <h3 style="font-size: 1.1rem;">Captación (Meta Ads)</h3>
+                <p>Estructuramos creativos sin riesgo de baneo. Ángulos de dolor: <em>"Mostrá menos y ganá más"</em>, <em>"Dejá de regalar tu contenido"</em>, <em>"El 90% se estanca por falta de equipo"</em>.</p>
+            </div>
+            <div class="card reveal" style="border-color: #444;">
+                <div style="font-size: 2rem; color: #fff; margin-bottom: 10px;">02</div>
+                <h3 style="font-size: 1.1rem; color: var(--text-light);">Cualificación (Landing)</h3>
+                <p>Una barrera de entrada premium. Una Landing Page oscura y corporativa con un Typeform que filtra curiosas evaluando su facturación actual, tiempo y compromiso.</p>
+            </div>
+            <div class="card reveal">
+                <div style="font-size: 2rem; color: #fff; margin-bottom: 10px;">03</div>
+                <h3 style="font-size: 1.1rem;">Cierre (Entrevistas)</h3>
+                <p>El equipo de Shelby Agency solo recibe en agenda a los perfiles de alto valor. Cero tiempo perdido en reuniones con prospectos no cualificados.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. LA BIFURCACIÓN (EL GOLPE MAESTRO) -->
+    <div class="container-sm">
+        <div class="highlight-box reveal" style="border-left-color: #fff; background: rgba(255, 255, 255, 0.05); padding: 40px;">
+            <h4 style="font-size: 1.5rem; margin-bottom: 15px;">La Jugada Maestra: Ecosistema "Kito Mentor"</h4>
+            <p style="color: #ddd; font-size: 1.1rem; margin-bottom: 20px;">En una agencia de alto nivel, vas a rechazar al 90% de las postulantes. <strong>Esos rechazos también son dinero.</strong></p>
+            <ul style="color: var(--text-muted); font-size: 1rem; list-style: none; padding: 0;">
+                <li style="margin-bottom: 15px;">✦ <strong>Top 10% (Aprobadas):</strong> Van a entrevista para firmar con Shelby Agency.</li>
+                <li style="margin-bottom: 0;">✦ <strong>Bottom 90% (Rechazadas):</strong> El sistema las redirige automáticamente: <em>"Aún no cumplís el perfil para la agencia, pero nuestro Director armó un entrenamiento para que llegues a ese nivel..."</em> y <strong>le vendemos el curso inicial automáticamente</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 3. GRÁFICO DE PROYECCIÓN -->
+    <div class="container" id="grafico">
+        <h2 class="section-title reveal">Economía del Embudo</h2>
+        <p class="section-subtitle reveal">Las ventas automáticas del curso a las postulantes rechazadas terminan financiando (o superando) toda la inversión publicitaria de la agencia.</p>
+        
+        <div class="chart-section reveal">
+            <div class="canvas-container">
+                <canvas id="funnelChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. ESTRUCTURA DE PRECIOS -->
+    <div class="container" id="precios">
+        <h2 class="section-title reveal">Esquema de Inversión</h2>
+        <p class="section-subtitle reveal">Estructuramos la inversión en dos fases: el ensamblaje de la maquinaria de captación y el mantenimiento operativo para inyectar prospectos nuevos todos los meses.</p>
+
+        <!-- SE CAMBIÓ GRID-3 POR GRID-2 Y SE ELIMINÓ LA TERCERA TARJETA -->
+        <div class="grid-2">
+            <div class="pricing-card reveal">
+                <h4>1. Setup Inicial</h4>
+                <div class="price">$700 <span style="font-size: 1rem; color: var(--text-muted);">USD</span></div>
+                <div class="desc">Construcción del Ecosistema</div>
+                <ul>
+                    <li style="color: #ddd;">✦ <strong>10 Creativos base</strong> con 2 a 3 variables de hooks para testeo.</li>
+                    <li style="color: #ddd;">✦ Guionado, grabación y edición premium de los Ads.</li>
+                    <li style="color: #ddd;">✦ Diseño de Landing Page Premium.</li>
+                    <li style="color: #ddd;">✦ Formularios y sistema de filtro de modelos.</li>
+                    <li style="color: #ddd;">✦ Configuración Business Manager y Píxeles.</li>
+                    <li style="color: #ddd;">✦ Conexión directa del CRM con Meta Ads.</li>
+                </ul>
+            </div>
+            <div class="pricing-card premium reveal">
+                <h4 style="color: var(--text-light);">2. Mantenimiento</h4>
+                <div class="price" style="color: var(--text-light);">$350 <span style="font-size: 1rem; color: var(--text-muted);">USD / mes</span></div>
+                <div class="desc">Operativa y Renovación</div>
+                <ul>
+                    <li style="color: #ddd;">✦ <strong>Renovación de creativos:</strong> Grabación, guionado y edición mensual.</li>
+                    <li style="color: #ddd;">✦ Creación y lanzamiento de campañas nuevas cada mes.</li>
+                    <li style="color: #ddd;">✦ Mantenimiento y gestión diaria de anuncios.</li>
+                    <li style="color: #ddd;">✦ Optimización continua para evitar fatiga visual.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        MAID STUDIOS | SISTEMA SHELBY AGENCY | 2026
+    </footer>
+
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) reveals[i].classList.add("active");
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        const ctx = document.getElementById('funnelChart').getContext('2d');
+        
+        let grad1 = ctx.createLinearGradient(0, 0, 0, 400);
+        grad1.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+        grad1.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        
+        let grad2 = ctx.createLinearGradient(0, 0, 0, 400);
+        grad2.addColorStop(0, 'rgba(255, 51, 51, 0.3)');
+        grad2.addColorStop(1, 'rgba(255, 51, 51, 0)');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Leads', 'Top 10% (Entrevistas Agencia)', 'Bottom 90% (Redirigidas a Curso)', 'Conversión a Ventas Curso (Auto)'],
+                datasets: [
+                    {
+                        label: 'Volumen de Perfiles',
+                        data: [500, 50, 450, 45],
+                        backgroundColor: ['#444', '#ffffff', '#222', '#ff3333'],
+                        borderWidth: 0,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { backgroundColor: '#222', titleColor: '#888', bodyColor: '#fff', padding: 15 }
+                },
+                scales: {
+                    y: { grid: { color: '#222', drawBorder: false }, ticks: { color: '#666' } },
+                    x: { grid: { display: false }, ticks: { color: '#888', font: { weight: 'bold', size: 11 } } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
