@@ -3,88 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAID STUDIOS | Sistema de Reclutamiento Shelby Agency</title>
+    <title>MAID STUDIOS | Sistema de Adquisición Shelby Agency</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-dark: #050505;
-            --bg-card: linear-gradient(145deg, #111111, #1a1a1a);
-            --bg-card-alt: linear-gradient(145deg, #0d0d0d, #141414);
-            --text-light: #f2efe9;
-            --text-muted: #888888;
-            --border-color: #222222;
-            --border-hover: #444444;
-            --accent: #ffffff;
-            --highlight: #dcd9d2;
+            --bg-dark: #000000;
+            --bg-card: rgba(28, 28, 30, 0.5);
+            --bg-card-alt: rgba(44, 44, 46, 0.4);
+            --text-light: #f5f5f7;
+            --text-muted: #86868b;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.25);
+            --accent: #ff9f0a; /* Sleek Apple Orange */
+            --accent-glow: rgba(255, 159, 10, 0.4);
+            --glass-blur: blur(20px);
+        }
+
+        /* Tipografía estilo Apple (San Francisco) */
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: local('-apple-system'), local('BlinkMacSystemFont');
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
             scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-light);
-            line-height: 1.6;
+            line-height: 1.47059;
+            letter-spacing: -0.022em;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* Animations */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.02); border-color: #333; }
-            50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.1); border-color: #666; }
-            100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.02); border-color: #333; }
+        /* Ambient Glow (Apple Event Vibe) */
+        .bg-glow {
+            position: fixed;
+            top: -20vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle, rgba(255,159,10,0.08) 0%, transparent 60%);
+            filter: blur(100px);
+            z-index: -1;
+            pointer-events: none;
         }
 
-        /* Navbar */
+        /* Buttery Smooth Animations (Apple Spring) */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px) scale(0.98); 
+            filter: blur(10px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 1s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+            filter: blur(0);
+        }
+
+        /* Glassmorphism Navbar */
         nav {
-            padding: 20px 5%;
-            border-bottom: 1px solid var(--border-color);
+            padding: 16px 5%;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(12px);
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        .logo { font-size: 24px; font-weight: 900; letter-spacing: 2px; }
-        .logo span { font-weight: 400; color: var(--text-muted); font-size: 14px; letter-spacing: 4px; }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: #fff; }
+        .logo span { font-weight: 400; color: var(--text-muted); font-size: 13px; letter-spacing: 3px; }
 
-        /* Hero */
+        /* Hero Apple Style */
         .hero {
             text-align: center;
-            padding: 120px 5% 100px;
-            max-width: 900px;
+            padding: 160px 5% 120px;
+            max-width: 980px;
             margin: 0 auto;
         }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.1; text-transform: uppercase; letter-spacing: -1px;}
-        .hero p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; }
+        .hero h1 { 
+            font-size: 4.5rem; 
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #fff 0%, #a1a1a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p { 
+            font-size: 1.4rem; 
+            color: var(--text-muted); 
+            margin-bottom: 48px; 
+            font-weight: 500;
+            letter-spacing: -0.015em;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
         
+        /* Pill Buttons */
         .btn {
             display: inline-block;
             background-color: var(--text-light);
-            color: var(--bg-dark);
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            color: #000;
+            padding: 14px 28px;
+            font-size: 17px;
+            font-weight: 600;
             text-decoration: none;
-            text-transform: uppercase;
-            border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 980px; /* Perfect pill */
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
         .btn:hover {
-            background-color: #ffffff;
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(255,255,255,0.15);
+            transform: scale(1.03);
+            box-shadow: 0 8px 24px rgba(255,255,255,0.15);
+        }
+        .btn:active {
+            transform: scale(0.97);
         }
         
         .btn-outline {
@@ -93,260 +144,365 @@
             border: 1px solid var(--border-color);
         }
         .btn-outline:hover {
-            background-color: rgba(255,255,255,0.05);
-            border-color: var(--border-hover);
+            background-color: rgba(255,255,255,0.1);
+            border-color: var(--text-light);
         }
 
         /* Layout */
-        .container { max-width: 1100px; margin: 0 auto; padding: 80px 5%; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 100px 5%; }
         .container-sm { max-width: 800px; margin: 0 auto; padding: 60px 5%; }
+        
         .section-title {
-            text-align: center; font-size: 2.2rem; margin-bottom: 20px;
-            text-transform: uppercase; letter-spacing: 1px; color: #fff;
+            text-align: center; 
+            font-size: 3rem; 
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.03em; 
+            color: #fff;
         }
         .section-subtitle {
-            text-align: center; color: var(--text-muted); max-width: 800px; margin: 0 auto 60px; font-size: 1.1rem;
+            text-align: center; 
+            color: var(--text-muted); 
+            max-width: 800px; 
+            margin: 0 auto 60px; 
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: -0.015em;
         }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
-        /* Cards Generales */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+        /* Glassmorphism Cards */
         .card {
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            padding: 40px 30px; border-radius: 8px;
-            transition: all 0.4s ease;
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color);
+            padding: 48px 40px; 
+            border-radius: 24px;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
             height: 100%;
         }
         .card:hover {
-            transform: translateY(-10px); border-color: var(--border-hover);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            transform: translateY(-8px) scale(1.01); 
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
-        .card h3 { font-size: 1.3rem; margin-bottom: 15px; text-transform: uppercase; color: #fff;}
-        .card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
-        .card ul { list-style: none; color: var(--text-muted); font-size: 0.95rem; }
-        .card ul li { margin-bottom: 10px; padding-left: 18px; position: relative; }
-        .card ul li::before { content: '✦'; position: absolute; left: 0; color: #666; font-size: 0.8rem; transition: 0.3s;}
-        .card:hover ul li::before { color: var(--text-light); }
+        .card h3 { font-size: 1.4rem; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.02em; color: #fff;}
+        .card p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 0; line-height: 1.5; }
 
-        /* Feature Highlight Box */
+        /* Highlight Box - Premium Detail */
         .highlight-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--text-light);
-            padding: 30px;
+            background: rgba(255, 159, 10, 0.05);
+            border: 1px solid rgba(255, 159, 10, 0.2);
+            padding: 48px;
             margin-bottom: 40px;
-            border-radius: 0 8px 8px 0;
+            border-radius: 24px;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            position: relative;
+            overflow: hidden;
         }
-        .highlight-box h4 { font-size: 1.2rem; text-transform: uppercase; margin-bottom: 10px; }
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent);
+        }
+        .highlight-box h4 { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 16px; color: var(--accent); }
         
         /* Badges */
         .badge {
             display: inline-block;
-            padding: 4px 10px;
-            background: #222;
-            border: 1px solid #444;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            padding: 6px 16px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 980px;
+            font-size: 0.85rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+            color: #d1d1d6;
+            backdrop-filter: blur(10px);
         }
 
         /* Gráfico Interactivo */
         .chart-section {
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 40px; margin-top: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color);
+            border-radius: 24px; 
+            padding: 40px; 
+            margin-top: 30px;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
-        .canvas-container { position: relative; height: 400px; width: 100%; }
+        .canvas-container { position: relative; height: 450px; width: 100%; }
 
-        /* Pricing */
+        /* Pricing UI */
         .pricing-card {
-            background: var(--bg-card-alt); text-align: center;
-            padding: 50px 30px; border-radius: 8px; border: 1px solid var(--border-color);
-            transition: all 0.4s ease;
+            background: var(--bg-card); 
+            text-align: left;
+            padding: 56px 48px; 
+            border-radius: 32px; 
+            border: 1px solid var(--border-color);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
         }
         .pricing-card.premium {
-            border: 1px solid #444;
-            background: linear-gradient(180deg, #111, #050505);
-            animation: pulseGlow 4s infinite alternate;
+            background: linear-gradient(180deg, rgba(30,30,32,0.8) 0%, rgba(10,10,12,0.8) 100%);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             position: relative;
-            overflow: hidden;
+        }
+        .pricing-card.premium::after {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            border-radius: 32px;
+            background: linear-gradient(135deg, rgba(255,159,10,0.5), transparent 40%, transparent 60%, rgba(255,159,10,0.1));
+            z-index: -1;
         }
         .pricing-card:hover {
-            transform: translateY(-10px); border-color: var(--border-hover); box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            transform: translateY(-12px); 
+            border-color: rgba(255,255,255,0.3);
         }
-        .pricing-card h4 { font-size: 1.5rem; text-transform: uppercase; margin-bottom: 15px; color: #ddd;}
-        .pricing-card .price { font-size: 2.2rem; font-weight: bold; margin-bottom: 10px; color: var(--text-light); }
-        .pricing-card .desc { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; }
-        .pricing-card ul { margin-bottom: 20px; flex-grow: 1; }
-        .pricing-card ul li { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px; font-size: 0.95rem; text-align: left;}
+        .pricing-card h4 { font-size: 1.5rem; font-weight: 600; margin-bottom: 8px; color: #fff;}
+        .pricing-card .price { font-size: 3.5rem; font-weight: 700; letter-spacing: -0.04em; margin-bottom: 12px; color: #fff; }
+        .pricing-card .desc { color: var(--text-muted); margin-bottom: 32px; font-size: 1.1rem; font-weight: 500; }
+        
+        .pricing-card ul { margin-bottom: 24px; flex-grow: 1; list-style: none; padding: 0;}
+        .pricing-card ul li { 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding: 16px 0; 
+            font-size: 1.05rem;
+            color: #d1d1d6;
+        }
+        .pricing-card ul li strong { color: #fff; font-weight: 600; }
         .pricing-card ul li:last-child { border-bottom: none; }
 
         footer {
-            text-align: center; padding: 50px 5%; border-top: 1px solid var(--border-color);
-            margin-top: 60px; color: #555; font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase;
+            text-align: center; 
+            padding: 60px 5%; 
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 80px; 
+            color: #86868b; 
+            font-size: 0.85rem; 
+            letter-spacing: 0.05em; 
+            font-weight: 500;
         }
 
-        @media (max-width: 900px) { .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 900px) { 
+            .grid-2, .grid-3 { grid-template-columns: 1fr; } 
+            .hero h1 { font-size: 3rem; }
+            .pricing-card { padding: 40px 30px; }
+        }
         @media (max-width: 768px) {
-            .grid-2, .grid-4, .grid-3 { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2.2rem; }
             .canvas-container { height: 300px; }
+            .section-title { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
+    <div class="bg-glow"></div>
 
     <nav>
-        <div class="logo">MAID <span>✦ STUDIOS ✦</span></div>
+        <div class="logo">MAID <span>✦ STUDIOS</span></div>
         <a href="#precios" class="btn btn-outline" style="padding: 10px 20px; font-size: 0.85rem;">Ver Modelo de Inversión</a>
     </nav>
 
     <header class="hero reveal active">
         <div class="badge">Shelby Agency x Maid Studios</div>
-        <h1>Máquina de Reclutamiento & Monetización</h1>
-        <p>Construimos un ecosistema para atraer modelos premium a la agencia, y un sistema automatizado para monetizar al 90% de las candidatas que son rechazadas vendiéndoles tu infoproducto.</p>
-        <div style="display:flex; gap:15px; justify-content:center; flex-wrap: wrap;">
-            <a href="#embudo" class="btn">El Embudo Híbrido</a>
-            <a href="#grafico" class="btn btn-outline">Proyección de Ventas</a>
+        <h1>Máquina de Adquisición de Suscriptores</h1>
+        <p>Transformamos el contenido orgánico existente en campañas publicitarias hiper-rentables. Construimos un ecosistema en Meta Ads para atraer fans cualificados y aumentar la facturación neta de tus modelos.</p>
+        <div style="display:flex; gap:16px; justify-content:center; flex-wrap: wrap;">
+            <a href="#embudo" class="btn">La Estrategia</a>
+            <a href="#grafico" class="btn btn-outline">Proyección</a>
         </div>
     </header>
 
     <!-- 1. LA ESTRATEGIA / EL EMBUDO -->
     <div class="container" id="embudo" style="padding-top: 20px;">
         <h2 class="section-title reveal">El Motor de Atracción</h2>
-        <p class="section-subtitle reveal">No buscamos chicas que quieran "plata fácil". Apuntamos a modelos estancadas, que regalan su contenido y queman su imagen. Les vendemos posicionamiento y profesionalismo.</p>
+        <p class="section-subtitle reveal">Las redes sociales cortaron el alcance orgánico. Para escalar la facturación de un modelo hoy, necesitamos inyectar pauta publicitaria estructurada sobre contenido validado.</p>
         
         <div class="grid-3">
             <div class="card reveal">
-                <div style="font-size: 2rem; color: #fff; margin-bottom: 10px;">01</div>
-                <h3 style="font-size: 1.1rem;">Captación (Meta Ads)</h3>
-                <p>Estructuramos creativos sin riesgo de baneo. Ángulos de dolor: <em>"Mostrá menos y ganá más"</em>, <em>"Dejá de regalar tu contenido"</em>, <em>"El 90% se estanca por falta de equipo"</em>.</p>
-            </div>
-            <div class="card reveal" style="border-color: #444;">
-                <div style="font-size: 2rem; color: #fff; margin-bottom: 10px;">02</div>
-                <h3 style="font-size: 1.1rem; color: var(--text-light);">Cualificación (Landing)</h3>
-                <p>Una barrera de entrada premium. Una Landing Page oscura y corporativa con un Typeform que filtra curiosas evaluando su facturación actual, tiempo y compromiso.</p>
+                <div style="font-size: 2.5rem; font-weight: 700; color: #fff; margin-bottom: 12px; opacity: 0.9;">01</div>
+                <h3>Minería de Contenido</h3>
+                <p>No perdemos tiempo grabando desde cero. Agarramos la bóveda del modelo (fotos y videos en crudo o subidos), y armamos <strong>50 videos y 50 fotos</strong> optimizados para Ads.</p>
             </div>
             <div class="card reveal">
-                <div style="font-size: 2rem; color: #fff; margin-bottom: 10px;">03</div>
-                <h3 style="font-size: 1.1rem;">Cierre (Entrevistas)</h3>
-                <p>El equipo de Shelby Agency solo recibe en agenda a los perfiles de alto valor. Cero tiempo perdido en reuniones con prospectos no cualificados.</p>
+                <div style="font-size: 2.5rem; font-weight: 700; color: #fff; margin-bottom: 12px; opacity: 0.9;">02</div>
+                <h3>Testeo Masivo (Ads)</h3>
+                <p>Lanzamos campañas en Meta probando múltiples ángulos y formatos. Evaluamos qué estilo de video o imagen trae suscriptores al menor costo posible (CPA).</p>
+            </div>
+            <div class="card reveal">
+                <div style="font-size: 2.5rem; font-weight: 700; color: #fff; margin-bottom: 12px; opacity: 0.9;">03</div>
+                <h3>Escala y Optimización</h3>
+                <p>Apagamos los anuncios que pierden plata e inyectamos presupuesto en los ganadores. Una vez validados, pedimos contenido similar a la agencia para no agotar la fórmula.</p>
             </div>
         </div>
     </div>
 
-    <!-- 2. LA BIFURCACIÓN (EL GOLPE MAESTRO) -->
+    <!-- 2. EL REQUISITO CLAVE -->
     <div class="container-sm">
-        <div class="highlight-box reveal" style="border-left-color: #fff; background: rgba(255, 255, 255, 0.05); padding: 40px;">
-            <h4 style="font-size: 1.5rem; margin-bottom: 15px;">La Jugada Maestra: Ecosistema "Kito Mentor"</h4>
-            <p style="color: #ddd; font-size: 1.1rem; margin-bottom: 20px;">En una agencia de alto nivel, vas a rechazar al 90% de las postulantes. <strong>Esos rechazos también son dinero.</strong></p>
-            <ul style="color: var(--text-muted); font-size: 1rem; list-style: none; padding: 0;">
-                <li style="margin-bottom: 15px;">✦ <strong>Top 10% (Aprobadas):</strong> Van a entrevista para firmar con Shelby Agency.</li>
-                <li style="margin-bottom: 0;">✦ <strong>Bottom 90% (Rechazadas):</strong> El sistema las redirige automáticamente: <em>"Aún no cumplís el perfil para la agencia, pero nuestro Director armó un entrenamiento para que llegues a ese nivel..."</em> y <strong>le vendemos el curso inicial automáticamente</strong>.</li>
+        <div class="highlight-box reveal">
+            <h4>El Requisito: La Bóveda de Contenidos</h4>
+            <p style="color: #d1d1d6; font-size: 1.15rem; margin-bottom: 24px; font-weight: 400; line-height: 1.5;">Meta Ads consume creativos muy rápido. Para que este sistema de 50 piezas mensuales funcione, no podemos depender de tiempos de grabación actuales. <strong>Empezaremos con la cuenta de Kito Shelby</strong> como caso de éxito, ya que posee un volumen masivo de material disponible.</p>
+            <ul style="color: var(--text-muted); font-size: 1.05rem; list-style: none; padding: 0; line-height: 1.6;">
+                <li style="margin-bottom: 16px;">✦ <strong>Materia Prima:</strong> Extraemos el valor del contenido histórico para generar tracción inmediata hoy.</li>
+                <li style="margin-bottom: 0;">✦ <strong>Protocolo para nuevos talentos:</strong> Cuando Shelby Agency firme nuevos modelos, será requisito interno que la agencia les solicite una "bóveda" inicial de fotos y videos aptos para que nuestro equipo pueda armarles su propio motor publicitario.</li>
             </ul>
         </div>
     </div>
 
-    <!-- 3. GRÁFICO DE PROYECCIÓN -->
-    <div class="container" id="grafico">
-        <h2 class="section-title reveal">Economía del Embudo</h2>
-        <p class="section-subtitle reveal">Las ventas automáticas del curso a las postulantes rechazadas terminan financiando (o superando) toda la inversión publicitaria de la agencia.</p>
-        
-        <div class="chart-section reveal">
-            <div class="canvas-container">
-                <canvas id="funnelChart"></canvas>
+    <!-- 3. ESTRUCTURA DE PRECIOS -->
+    <div class="container" id="precios">
+        <h2 class="section-title reveal">Esquema de Inversión</h2>
+        <p class="section-subtitle reveal">Asumimos un esquema de bajo costo inicial para validar la rentabilidad en los primeros 3 meses, y luego migramos a un modelo de negocio a riesgo donde ganamos un porcentaje del capital invertido.</p>
+
+        <div class="grid-2">
+            <div class="pricing-card reveal">
+                <h4>Fase 1: Trimestre de Testeo</h4>
+                <div class="price">$900 <span style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">USD / 3 meses</span></div>
+                <div class="desc">Pago adelantado por el setup y validación trimestral.</div>
+                <ul>
+                    <li>✦ <strong>Procesamiento de Bóveda:</strong> Edición y preparación de <strong>50 videos y 50 fotos</strong> mensuales.</li>
+                    <li>✦ Creación de creativos con múltiples ángulos y variaciones (Hooks).</li>
+                    <li>✦ Set-up y estructuración del Business Manager / Píxeles.</li>
+                    <li>✦ Lanzamiento de campañas de captación en Meta Ads.</li>
+                    <li>✦ Optimización semanal: escalamos ganadores y apagamos perdedores.</li>
+                    <li style="color: var(--accent); font-weight: 600; padding-top: 24px; border: none;">Inversión mínima recomendada en Ads: $300 - $500 USD/mes (Abonados a Meta).</li>
+                </ul>
+            </div>
+            
+            <div class="pricing-card premium reveal">
+                <h4>Fase 2: Escalamiento a Porcentaje</h4>
+                <div class="price">% Variable <span style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">del Ad Spend</span></div>
+                <div class="desc">A partir del mes 4. Alineación total de incentivos.</div>
+                <ul>
+                    <li>✦ <strong>Modelo Growth:</strong> Nuestro beneficio se ata directamente a la inversión publicitaria que soporte la rentabilidad.</li>
+                    <li>✦ <strong>Acuerdo a Medida:</strong> El porcentaje exacto se negocia y define en una llamada de revisión al finalizar el trimestre de testeo.</li>
+                    <li>✦ <strong>Sistema de Escalas:</strong> A mayor capital publicitario invertido (ej. $10.000 USD), menor será nuestro porcentaje de comisión. Premiamos el volumen.</li>
+                    <li>✦ <strong>Renovación Continua:</strong> Mantenemos la cuota operativa base de $350 USD por modelo para cubrir la producción constante de los 50 creativos mensuales y evitar fatiga publicitaria.</li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <!-- 4. ESTRUCTURA DE PRECIOS -->
-    <div class="container" id="precios">
-        <h2 class="section-title reveal">Esquema de Inversión</h2>
-        <p class="section-subtitle reveal">Estructuramos la inversión en dos fases: el ensamblaje de la maquinaria de captación y el mantenimiento operativo para inyectar prospectos nuevos todos los meses.</p>
-
-        <!-- SE CAMBIÓ GRID-3 POR GRID-2 Y SE ELIMINÓ LA TERCERA TARJETA -->
-        <div class="grid-2">
-            <div class="pricing-card reveal">
-                <h4>1. Setup Inicial</h4>
-                <div class="price">$700 <span style="font-size: 1rem; color: var(--text-muted);">USD</span></div>
-                <div class="desc">Construcción del Ecosistema</div>
-                <ul>
-                    <li style="color: #ddd;">✦ <strong>10 Creativos base</strong> con 2 a 3 variables de hooks para testeo.</li>
-                    <li style="color: #ddd;">✦ Guionado, grabación y edición premium de los Ads.</li>
-                    <li style="color: #ddd;">✦ Diseño de Landing Page Premium.</li>
-                    <li style="color: #ddd;">✦ Formularios y sistema de filtro de modelos.</li>
-                    <li style="color: #ddd;">✦ Configuración Business Manager y Píxeles.</li>
-                    <li style="color: #ddd;">✦ Conexión directa del CRM con Meta Ads.</li>
-                </ul>
-            </div>
-            <div class="pricing-card premium reveal">
-                <h4 style="color: var(--text-light);">2. Mantenimiento</h4>
-                <div class="price" style="color: var(--text-light);">$350 <span style="font-size: 1rem; color: var(--text-muted);">USD / mes</span></div>
-                <div class="desc">Operativa y Renovación</div>
-                <ul>
-                    <li style="color: #ddd;">✦ <strong>Renovación de creativos:</strong> Grabación, guionado y edición mensual.</li>
-                    <li style="color: #ddd;">✦ Creación y lanzamiento de campañas nuevas cada mes.</li>
-                    <li style="color: #ddd;">✦ Mantenimiento y gestión diaria de anuncios.</li>
-                    <li style="color: #ddd;">✦ Optimización continua para evitar fatiga visual.</li>
-                </ul>
+    <!-- 4. GRÁFICO DE PROYECCIÓN -->
+    <div class="container" id="grafico">
+        <h2 class="section-title reveal">Proyección del Embudo</h2>
+        <p class="section-subtitle reveal">A medida que se optimiza el algoritmo de Meta, el costo por suscriptor disminuye, permitiendo escalar la inversión y multiplicar los ingresos.</p>
+        
+        <div class="chart-section reveal">
+            <div class="canvas-container">
+                <canvas id="growthChart"></canvas>
             </div>
         </div>
     </div>
 
     <footer>
-        MAID STUDIOS | SISTEMA SHELBY AGENCY | 2026
+        MAID STUDIOS &copy; 2026. SISTEMA SHELBY AGENCY.
     </footer>
 
     <script>
+        // Animaciones suaves estilo Apple
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
                 var windowHeight = window.innerHeight;
                 var elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 100) reveals[i].classList.add("active");
+                if (elementTop < windowHeight - 80) reveals[i].classList.add("active");
             }
         }
         window.addEventListener("scroll", reveal);
-        reveal();
+        reveal(); // Trigger on load
 
-        const ctx = document.getElementById('funnelChart').getContext('2d');
+        // Configuración Chart.js Apple Vibe
+        const ctx = document.getElementById('growthChart').getContext('2d');
         
         let grad1 = ctx.createLinearGradient(0, 0, 0, 400);
         grad1.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
         grad1.addColorStop(1, 'rgba(255, 255, 255, 0)');
         
         let grad2 = ctx.createLinearGradient(0, 0, 0, 400);
-        grad2.addColorStop(0, 'rgba(255, 51, 51, 0.3)');
-        grad2.addColorStop(1, 'rgba(255, 51, 51, 0)');
+        grad2.addColorStop(0, 'rgba(255, 159, 10, 0.3)');
+        grad2.addColorStop(1, 'rgba(255, 159, 10, 0)');
+
+        Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif';
+        Chart.defaults.color = '#86868b';
 
         new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: ['Total Leads', 'Top 10% (Entrevistas Agencia)', 'Bottom 90% (Redirigidas a Curso)', 'Conversión a Ventas Curso (Auto)'],
+                labels: ['Mes 1 (Testeo)', 'Mes 2 (Optimización)', 'Mes 3 (Ajuste)', 'Mes 4 (Escala a Porcentaje)'],
                 datasets: [
                     {
-                        label: 'Volumen de Perfiles',
-                        data: [500, 50, 450, 45],
-                        backgroundColor: ['#444', '#ffffff', '#222', '#ff3333'],
-                        borderWidth: 0,
-                        borderRadius: 4
+                        label: 'Inversión en Ads (USD)',
+                        data: [300, 500, 800, 2000],
+                        borderColor: '#ff9f0a',
+                        backgroundColor: grad2,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        borderDash: [4, 4],
+                        pointBackgroundColor: '#1c1c1e',
+                        pointBorderColor: '#ff9f0a'
+                    },
+                    {
+                        label: 'Retorno Estimado (Nuevos Suscriptores)',
+                        data: [600, 1500, 3200, 9000],
+                        borderColor: '#ffffff',
+                        backgroundColor: grad1,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#1c1c1e',
+                        pointBorderColor: '#ffffff',
+                        pointRadius: 6,
+                        pointHoverRadius: 10
                     }
                 ]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
                 plugins: {
-                    legend: { display: false },
-                    tooltip: { backgroundColor: '#222', titleColor: '#888', bodyColor: '#fff', padding: 15 }
+                    legend: { 
+                        display: true,
+                        labels: { color: '#d1d1d6', usePointStyle: true, boxWidth: 8 }
+                    },
+                    tooltip: { 
+                        backgroundColor: 'rgba(28, 28, 30, 0.9)', 
+                        titleColor: '#86868b', 
+                        bodyColor: '#fff', 
+                        padding: 16,
+                        cornerRadius: 12,
+                        backdropFilter: 'blur(10px)',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1
+                    }
                 },
                 scales: {
-                    y: { grid: { color: '#222', drawBorder: false }, ticks: { color: '#666' } },
-                    x: { grid: { display: false }, ticks: { color: '#888', font: { weight: 'bold', size: 11 } } }
+                    y: { 
+                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, 
+                        ticks: { color: '#86868b' }
+                    },
+                    x: { 
+                        grid: { display: false }, 
+                        ticks: { color: '#86868b', font: { weight: '500' } } 
+                    }
                 }
             }
         });
